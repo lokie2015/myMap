@@ -1,0 +1,26 @@
+<form [formGroup]="form">
+    <mat-form-field class="form-field">
+      <mat-label>Starting Location</mat-label>
+      <input matInput placeholder="Starting Location" value="" #start formControlName="origin">
+      <button mat-button *ngIf="start.value" matSuffix mat-icon-button aria-label="Clear" (click)="start.value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <br>
+      <br>
+    </mat-form-field>
+  
+    <mat-form-field class=form-field>
+      <mat-label>Drop-off Point</mat-label>
+      <input matInput placeholder="Drop-off Point" value="" #end formControlName="destination">
+      <button mat-button *ngIf="end.value" matSuffix mat-icon-button aria-label="Clear" (click)="end.value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <br>
+      <br>
+    </mat-form-field>
+
+   <ng-container class="buttons">
+        <button mat-raised-button color="primary" (click)="onSubmit(form.value)">{{submitBtn}}</button>
+        <button mat-raised-button color="primary" (click)="resetAll()">Reset</button>
+    </ng-container>
+  </form>
