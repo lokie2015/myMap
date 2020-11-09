@@ -19,6 +19,28 @@
       <br>
     </mat-form-field>
 
+    <!-- for displaying successful route with total distance and total time needed -->
+    <ng-container *ngIf="total_distance && total_time">
+      <div>
+      Total Distance: {{total_distance}} 
+      <br>
+      Total Time: {{total_time}}
+    </div>
+    </ng-container>
+
+    <!-- for displaying warning message -->
+    <ng-container *ngIf="warning">
+      <div class="warning">{{warning}}</div>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="directions">
+      <ol style="float: left; background-color: #FFF; width: 35%; min-height: 530px; margin-left: 20px; margin-top: 0">
+        <li *ngFor="let direction of directions">
+            <p [innerHTML]="direction.instruction"></p>
+        </li>
+    </ol>
+    </ng-container> -->
+
    <ng-container class="buttons">
         <button mat-raised-button color="primary" (click)="onSubmit(form.value)">{{submitBtn}}</button>
         <button mat-raised-button color="primary" (click)="resetAll()">Reset</button>
