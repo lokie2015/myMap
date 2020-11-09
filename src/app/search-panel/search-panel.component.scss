@@ -1,27 +1,28 @@
 .form-field {
-    width: 200px;
-    display: block ;
+  width: 200px;
+  display: block;
 }
 
-form{
+form {
   padding: 16px;
 }
 
 /* for button */
 
-button{
+button {
   margin: 10px 10px 10px 0;
   width: 100px;
 }
 
-button:hover{
+button:hover {
   opacity: 0.3;
 }
 
-.buttons{
-    display: block;
+.buttons {
+  display: block;
 }
 
-.warning{
+/* for warning message */
+.warning {
   color: red;
 }

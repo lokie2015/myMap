@@ -14,8 +14,8 @@ import { Subscription } from "rxjs";
 export class SearchPanelComponent implements OnInit {
 
   public form;
-  public start = '';
-  public end = '';
+  public origin = '';
+  public destination = '';
   public submitBtn = 'Submit';
   public total_distance = null;
   public total_time = null;
@@ -23,7 +23,7 @@ export class SearchPanelComponent implements OnInit {
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     })
   };
 
@@ -75,25 +75,23 @@ export class SearchPanelComponent implements OnInit {
   handleGetRouteResponse(response) {
     switch (response.status) {
       case 'success': {
-        /* Case 1: 200 succes status response  
-        *  if success, will have path, total_distance, total_time in the response */
+        /* Case 1: 200 succes status response */
+        this.clearInfo();
         this.data.updateRouteInfo(response.path[0].join(","), response.path[1].join(","),
           response.path[2].join(","), response.total_distance, response.total_time);
-        this.warning = '';
         break;
       }
       case 'in progress': {
-        /* Case 2: 200 in progress status response
-        *  if busy, need to retry */
+        /* Case 2: 200 in progress status response */
         this.snackBarService.showSnackBar('Server busy now, Retrying...');
         this.onSubmit(this.form);
-        this.warning = '';
+        this.clearInfo();
         break;
       }
       case 'failure': {
-        /* Case 3: 200 failure status response  
-        *  if failure, will have error in the response */
+        /* Case 3: 200 failure status response */
         this.snackBarService.showSnackBar(response.error);
+        this.clearInfo();
         this.warning = response.error;
         break;
       }
@@ -104,9 +102,15 @@ export class SearchPanelComponent implements OnInit {
   }
 
   handleError(error: any): void {
-    this.warning = '';
+    this.clearInfo();
     console.log("Error found: ", error);
     this.snackBarService.showSnackBar('Error found, please try again later.');
+  }
+
+  clearInfo():void{
+    this.warning = '';
+    this.total_distance = null;
+    this.total_time = null;
   }
 
 }

@@ -30,24 +30,17 @@ export class MapComponent implements OnInit {
   public lng: any;
 
   @Input()
-  public start: any;
-
-  @Input()
-  public finish: any;
-
-  @Input()
-  public middle: any;
+  public height: any;
 
   @Input()
   public width: any;
 
-  @Input()
-  public height: any;
-
+  private start: any;
+  private finish: any;
+  private middle: any;
   private platform: any;
   private map: any;
-  private ui: any;
-  public directions: any;
+  private directions: any;
   private router: any;
 
   constructor(private data: DataService) { }
@@ -78,7 +71,7 @@ export class MapComponent implements OnInit {
       }
     );
     window.addEventListener('resize', () => this.map.getViewPort().resize());
-  //var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+  var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
   }
 
   // subscribe to the data service for getting the waypoints
@@ -135,7 +128,7 @@ export class MapComponent implements OnInit {
         this.map.setViewBounds(routeLine.getBounds());
       }
     }, error => {
-      console.error("route - error", error);
+      console.error("Error with getting the route from HERE Maps", error);
     });
   }
 
