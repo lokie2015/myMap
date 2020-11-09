@@ -35,9 +35,6 @@ export class MapComponent implements OnInit {
   @Input()
   public width: any;
 
-  private start: any;
-  private finish: any;
-  private middle: any;
   private platform: any;
   private map: any;
   private directions: any;
@@ -53,9 +50,6 @@ export class MapComponent implements OnInit {
 
     this.directions = [];
     this.router = this.platform.getRoutingService();
-    this.start = "";
-    this.middle = "";
-    this.finish = "";
     this.subscribeToDataService();
   }
 
@@ -71,7 +65,7 @@ export class MapComponent implements OnInit {
       }
     );
     window.addEventListener('resize', () => this.map.getViewPort().resize());
-  var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
   }
 
   // subscribe to the data service for getting the waypoints
@@ -79,19 +73,16 @@ export class MapComponent implements OnInit {
     return this.data.routeInfo.subscribe(waypoint => {
       console.log("subscribe to data service with waypoint: ");
       console.log(waypoint);
-      this.start = waypoint['waypoint1'];
-      this.middle = waypoint['waypoint2'];
-      this.finish = waypoint['waypoint3'];
-      this.route(this.start, this.middle, this.finish);
+      this.route(waypoint['waypoint1'], waypoint['waypoint2'], waypoint['waypoint3']);
     });
   };
 
   public route(start: any, middle: any, finish: any) {
     let params = {
       "mode": "fastest;car",
-      "waypoint0": "geo!" + this.start,
-      "waypoint1": "geo!" + this.middle,
-      "waypoint2": "geo!" + this.finish,
+      "waypoint0": "geo!" + start,
+      "waypoint1": "geo!" + middle,
+      "waypoint2": "geo!" + finish,
       "representation": "display"
     }
     // remove the exisitng markers
@@ -112,18 +103,9 @@ export class MapComponent implements OnInit {
           style: { strokeColor: "blue", lineWidth: 5 }
         });
 
-        let startMarker = new H.map.Marker({
-          lat: this.start.split(",")[0],
-          lng: this.start.split(",")[1]
-        }, { icon: new H.map.Icon('../../assets/A.png', { size: { w: 32, h: 32 } }), zIndex: 10 });
-        let middleMarker = new H.map.Marker({
-          lat: this.middle.split(",")[0],
-          lng: this.middle.split(",")[1]
-        }, { icon: new H.map.Icon('../../assets/B.png', { size: { w: 32, h: 32 } }), zIndex: 20 });
-        let finishMarker = new H.map.Marker({
-          lat: this.finish.split(",")[0],
-          lng: this.finish.split(",")[1]
-        }, { icon: new H.map.Icon('../../assets/C.png', { size: { w: 32, h: 32 } }), zIndex: 30 });
+        let startMarker = this.generateMarker(start, 'A', 10);
+        let middleMarker = this.generateMarker(middle, 'B', 20);
+        let finishMarker = this.generateMarker(finish, 'C', 30);
         this.map.addObjects([routeLine, startMarker, middleMarker, finishMarker]);
         this.map.setViewBounds(routeLine.getBounds());
       }
@@ -132,5 +114,10 @@ export class MapComponent implements OnInit {
     });
   }
 
-
+  public generateMarker(position: string, sequence: string, zIndex: number): any {
+    return new H.map.Marker({
+      lat: position.split(",")[0],
+      lng: position.split(",")[1]
+    }, { icon: new H.map.Icon('../../assets/' + sequence + '.png', { size: { w: 32, h: 32 } }), zIndex: zIndex });
+  };
 }
