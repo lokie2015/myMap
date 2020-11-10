@@ -1,0 +1,9 @@
+<mat-form-field class="form-field" [formGroup]="parentForm">
+  <mat-label>{{label}}</mat-label>
+  <input matInput placeholder="{{label}}" value="" #val formControlName="{{name}}">
+  <button mat-button *ngIf="val.value" matSuffix mat-icon-button aria-label="Clear" (click)="val.value=''">
+    <mat-icon>close</mat-icon>
+  </button>
+  <br>
+  <br>
+</mat-form-field>

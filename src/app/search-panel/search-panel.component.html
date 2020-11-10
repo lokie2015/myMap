@@ -1,25 +1,7 @@
 <form [formGroup]="form">
-  <mat-form-field class="form-field">
-    <mat-label>Starting Location</mat-label>
-    <input matInput placeholder="Starting Location" value="" #start formControlName="origin">
-    <button mat-button *ngIf="start.value" matSuffix mat-icon-button aria-label="Clear" (click)="start.value=''">
-      <mat-icon>close</mat-icon>
-    </button>
-    <br>
-    <br>
-  </mat-form-field>
-
-  <mat-form-field class=form-field>
-    <mat-label>Drop-off Point</mat-label>
-    <input matInput placeholder="Drop-off Point" value="" #end formControlName="destination">
-    <button mat-button *ngIf="end.value" matSuffix mat-icon-button aria-label="Clear" (click)="end.value=''">
-      <mat-icon>close</mat-icon>
-    </button>
-    <br>
-    <br>
-  </mat-form-field>
+  <app-input-field label="Starting Location" name="origin" [parentForm]="form"></app-input-field>
+  <app-input-field label="Drop-off Point" name="destination" [parentForm]="form"></app-input-field>
   <br>
-
   <!-- for displaying successful route with total distance and total time needed -->
   <ng-container *ngIf="total_distance && total_time">
     <div>

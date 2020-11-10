@@ -102,9 +102,9 @@ export class SearchPanelComponent implements OnInit {
   }
 
   handleError(error: any): void {
-    this.clearInfo();
-    console.log("Error found: ", error);
-    this.snackBarService.showSnackBar('Error found, please try again later.');
+     console.log("Error found: ", error);
+     this.clearInfo();
+     this.snackBarService.showSnackBar('Error found, please try again later.');
   }
 
   clearInfo():void{
