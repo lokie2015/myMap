@@ -21,5 +21,5 @@ npm install
 ```
 ## Get Started
 ```sh
-Run ng serve –-prod 
+ng serve –-prod 
 ```
