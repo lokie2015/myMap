@@ -16,16 +16,19 @@
     <div class="warning">{{warning}}</div>
   </ng-container>
 
-  <!-- <ng-container *ngIf="directions">
-      <ol style="float: left; background-color: #FFF; width: 35%; min-height: 530px; margin-left: 20px; margin-top: 0">
-        <li *ngFor="let direction of directions">
-            <p [innerHTML]="direction.instruction"></p>
-        </li>
-    </ol>
-    </ng-container> -->
 
   <ng-container class="buttons">
     <button mat-raised-button color="primary" (click)="onSubmit(form.value)">{{submitBtn}}</button>
     <button mat-raised-button color="primary" (click)="resetAll()">Reset</button>
+  </ng-container>
+
+  
+  <br>
+  <ng-container *ngIf="directions" class="direction">
+    <ol style="float: left; background-color: #FFF; height: 400px;overflow: auto; margin-top: 0; scrollbar-width:thin">
+      <li *ngFor="let direction of directions">
+          <p [innerHTML]="direction.instruction"></p>
+      </li>
+  </ol>
   </ng-container>
 </form>

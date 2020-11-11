@@ -20,7 +20,7 @@ export interface SnackbarOption {
   providedIn: 'root'
 })
 export class SnackbarService {
-  private readonly durationInSeconds: number = 3;
+  private readonly durationInSeconds: number = 2;
   private readonly horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   private readonly verticalPosition: MatSnackBarVerticalPosition = 'top';
 

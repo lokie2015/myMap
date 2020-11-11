@@ -14,12 +14,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { InputFieldComponent } from './input-field/input-field.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    SearchPanelComponent
+    SearchPanelComponent,
+    InputFieldComponent
   ],
   imports: [
     BrowserModule,

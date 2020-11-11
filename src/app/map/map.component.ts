@@ -35,10 +35,10 @@ export class MapComponent implements OnInit {
   @Input()
   public width: any;
 
-  private platform: any;
-  private map: any;
-  private directions: any;
-  private router: any;
+  public platform: any;
+  public map: any;
+  public directions: any;
+  public router: any;
 
   constructor(private data: DataService) { }
 
@@ -93,6 +93,7 @@ export class MapComponent implements OnInit {
     this.router.calculateRoute(params, data => {
       if (data.response) {
         this.directions = data.response.route[0].leg[0].maneuver;
+        this.data.updateDirections(this.directions);
         data = data.response.route[0];
         let lineString = new H.geo.LineString();
         data.shape.forEach(point => {
@@ -102,16 +103,21 @@ export class MapComponent implements OnInit {
         let routeLine = new H.map.Polyline(lineString, {
           style: { strokeColor: "blue", lineWidth: 5 }
         });
-
-        let startMarker = this.generateMarker(start, 'A', 10);
-        let middleMarker = this.generateMarker(middle, 'B', 20);
-        let finishMarker = this.generateMarker(finish, 'C', 30);
-        this.map.addObjects([routeLine, startMarker, middleMarker, finishMarker]);
+        const objs = [];
+        objs.push(routeLine);
+        this.map.addObjects(this.getMarkersWithWaypoints(start, middle, finish, objs));
         this.map.setViewBounds(routeLine.getBounds());
       }
     }, error => {
       console.error("Error with getting the route from HERE Maps", error);
     });
+  }
+
+  public getMarkersWithWaypoints(start: any, middle: any, finish: any, obj: Array<any>): any{
+    obj.push(this.generateMarker(start, 'A', 10));
+    obj.push(this.generateMarker(middle, 'B', 20));
+    obj.push(this.generateMarker(finish, 'C', 30));
+    return obj;
   }
 
   public generateMarker(position: string, sequence: string, zIndex: number): any {

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AppSettings } from './../properties';
-import { SnackbarService } from './../services/snackbar.service';
-import { DataService } from './../services/data.service';
-import { Subscription } from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {AppSettings} from './../properties';
+import {SnackbarService} from './../services/snackbar.service';
+import {DataService} from './../services/data.service';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'search-panel',
@@ -20,6 +20,7 @@ export class SearchPanelComponent implements OnInit {
   public total_distance = null;
   public total_time = null;
   public warning = null;
+  public directions = null;
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -43,25 +44,37 @@ export class SearchPanelComponent implements OnInit {
   }
 
   subscribeToDataService(): Subscription {
-    return this.data.routeInfo.subscribe(waypoint => {
+    this.data.routeInfo.subscribe(waypoint => {
       this.total_distance = waypoint['total_distance'];
       this.total_time = waypoint['total_time'];
     });
+    this.data.directions.subscribe(directions => {
+      this.directions = directions;
+    });
+    return;
   };
 
   onSubmit(form) {
     this.submitBtn = 'Re-Submit';
     const formData = new HttpParams().set('origin', form.origin).set('destination', form.destination);
     let path = AppSettings.SERVER_ENDPOINT + '/route';
+    this.sendPostRequestWithForm(path, formData);
+  }
+
+  sendPostRequestWithForm(path: any, formData: any) {
     this.http.post(path, formData, this.httpOptions).subscribe(
       response => {
-        this.http.get(path + '/' + response['token']).subscribe(
-          response => {
-            this.handleGetRouteResponse(response);
-          }, error => {
-            this.handleError(error);
-          }
-        );
+        this.sendGetRequestWithToken(path, response['token']);
+      }, error => {
+        this.handleError(error);
+      }
+    );
+  }
+
+  sendGetRequestWithToken(path: any, token: any) {
+    this.http.get(path + '/' + token).subscribe(
+      response => {
+        this.handleGetRouteResponse(response);
       }, error => {
         this.handleError(error);
       }
@@ -77,8 +90,8 @@ export class SearchPanelComponent implements OnInit {
       case 'success': {
         /* Case 1: 200 succes status response */
         this.clearInfo();
-        this.data.updateRouteInfo(response.path[0].join(","), response.path[1].join(","),
-          response.path[2].join(","), response.total_distance, response.total_time);
+        this.data.updateRouteInfo(response.path[0].join(','), response.path[1].join(','),
+          response.path[2].join(','), response.total_distance, response.total_time);
         break;
       }
       case 'in progress': {
@@ -102,15 +115,16 @@ export class SearchPanelComponent implements OnInit {
   }
 
   handleError(error: any): void {
-     console.log("Error found: ", error);
-     this.clearInfo();
-     this.snackBarService.showSnackBar('Error found, please try again later.');
+    console.log('Error found: ', error);
+    this.clearInfo();
+    this.snackBarService.showSnackBar('Error found, please try again later.');
   }
 
-  clearInfo():void{
+  clearInfo(): void {
     this.warning = '';
     this.total_distance = null;
     this.total_time = null;
+    this.directions = null;
   }
 
 }

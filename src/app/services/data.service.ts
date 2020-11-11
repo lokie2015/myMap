@@ -12,6 +12,10 @@ export class DataService {
   public routeInfoSource = new BehaviorSubject<ROUTE_INFO>(this.routeInfoDetail);
   public routeInfo = this.routeInfoSource.asObservable();
 
+  public directionDetail = "";
+  public directionSource = new BehaviorSubject<string>("");
+  public directions = this.directionSource.asObservable();
+
   constructor() { }
 
   updateRouteInfo(waypoint1: any, waypoint2: any, waypoint3: any, total_distance: any, total_time: any): void {
@@ -23,6 +27,10 @@ export class DataService {
       "total_distance": total_distance,
       "total_time": total_time
     });
+  }
+
+  updateDirections(directions: any){
+    this.directionSource.next(directions);
   }
 
 }
